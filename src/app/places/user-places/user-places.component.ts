@@ -17,6 +17,7 @@ export class UserPlacesComponent {
   isFetching = signal(false)
   error = signal('')
 
+
   private placeService = inject(PlacesService);
   private destroyRef = inject(DestroyRef)
 
@@ -32,6 +33,14 @@ export class UserPlacesComponent {
         this.isFetching.set(false)
       }
     })
+
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    })
+  }
+
+  onSelectPlace(selectedPlace: Place) {
+    const subscription = this.placeService.removeUserPlace(selectedPlace).subscribe();
 
     this.destroyRef.onDestroy(() => {
       subscription.unsubscribe();
